@@ -1,0 +1,49 @@
+---
+import PrimaryLayout from '~/layouts/PrimaryLayout.astro';
+import ProductCarouselSection from '~/features/product/ProductCarouselSection.astro';
+import { allProducts, asCartProduct, findProduct, formatMoney, productImage, productPrice } from '~/lib/catalog.js';
+import { sitePath } from '~/lib/asset-base.js';
+import { button } from '~/styles.ts';
+
+export function getStaticPaths() {
+	return allProducts.map((product) => ({ params: { id: product.id } }));
+}
+
+const product = findProduct(Astro.params.id);
+if (!product) return Astro.redirect('/minorista');
+
+const retail = productPrice(product, 'minorista');
+const wholesale = productPrice(product, 'mayorista');
+const retailCart = asCartProduct(product, 'minorista');
+const wholesaleCart = asCartProduct(product, 'mayorista');
+const backHref = sitePath('/minorista');
+---
+
+<PrimaryLayout title={`${product.nombre} | Control Center`}>
+	<main class="breakout py-10">
+		<div class="content grid gap-10 lg:grid-cols-[minmax(0,1fr)_28rem]">
+			<div class="bg-theme-base-100 p-8">
+				<img src={productImage(product)} alt={product.nombre} class="mx-auto aspect-square max-h-[620px] w-full object-contain" />
+			</div>
+			<section class="flex flex-col gap-5">
+				<a href={backHref} class="text-sm font-bold uppercase text-theme-base-500 hover:text-theme-base-900">Volver al catalogo</a>
+				<p class="text-sm font-bold uppercase text-theme-base-500">{product.categoria}</p>
+				<h1 class="text-4xl font-extrabold text-theme-base-900">{product.nombre}</h1>
+				<p class="text-theme-base-600">{product.descripcion}</p>
+				<dl class="grid grid-cols-2 gap-3 text-sm">
+					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Marca</dt><dd class="font-bold">{product.marca || 'pendiente'}</dd></div>
+					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Stock</dt><dd class="font-bold">{product.stock ?? 'pendiente'}</dd></div>
+					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Minorista</dt><dd class="font-bold">{formatMoney(retail)}</dd></div>
+					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Mayorista</dt><dd class="font-bold">{formatMoney(wholesale)}</dd></div>
+				</dl>
+				<div class="grid gap-3 sm:grid-cols-2">
+					<button class={button({ className: 'h-12' })} type="button" data-add-cart data-label="Agregar minorista" data-product={JSON.stringify(retailCart)}>Agregar minorista</button>
+					<button class={button({ theme: 'light', className: 'h-12 border border-theme-base-300' })} type="button" data-add-cart data-label="Agregar mayorista" data-product={JSON.stringify(wholesaleCart)}>Agregar mayorista</button>
+				</div>
+			</section>
+		</div>
+		<div class="content mt-16">
+			<ProductCarouselSection heading="Tambien puede interesarte" products={allProducts.filter((item) => item.id !== product.id).slice(0, 8)} />
+		</div>
+	</main>
+</PrimaryLayout>

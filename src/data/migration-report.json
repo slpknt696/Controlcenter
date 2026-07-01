@@ -1,0 +1,406 @@
+{
+  "generated_at": "2026-06-29T21:30:56.057Z",
+  "base_detected": "/",
+  "source_products": 1530,
+  "final_products": 1530,
+  "migrated_products": 1530,
+  "images_detected": 1482,
+  "images_copied": 1482,
+  "images_not_found": 47,
+  "external_images_count": 1,
+  "duplicates_detected": 0,
+  "categories": 12,
+  "brands": 6,
+  "product_files_replaced": [
+    "src/data/controlcenter-products.json",
+    "src/data/products.json",
+    "src/data/products.mock.json",
+    "src/data/products.ts",
+    "src/lib/controlcenter-products.ts"
+  ],
+  "pages_modified": [
+    "src/pages/index.astro",
+    "src/pages/catalogo.astro",
+    "src/pages/minorista.astro",
+    "src/pages/mayorista.astro",
+    "src/pages/producto/[id].astro",
+    "src/pages/carrito.astro",
+    "src/pages/admin.astro"
+  ],
+  "routes_removed": [
+    "src/pages/controlcenter-catalogo.astro",
+    "src/pages/controlcenter-diagnostico.astro",
+    "src/pages/api/controlcenter-products.json.ts"
+  ],
+  "routes_corrected": [
+    "Product images now use /img/products/<file>",
+    "Components use import.meta.env.BASE_URL through src/lib/asset-base.js",
+    "Canonical product API is /api/products"
+  ],
+  "build_result": "passed",
+  "errors_fixed": [
+    "Template/demo product data replaced by real Control Center products",
+    "Public product image paths moved from /r2/... to /img/products/...",
+    "Visible mock/prototype texts removed from customer pages",
+    "Duplicate diagnostic catalog routes removed"
+  ],
+  "pending_errors": [],
+  "missing_images": [
+    {
+      "id": "cable-tipo-c-a-tipo-c-modo-141-sync-c-xaea-blanco-131",
+      "sku": "cable-tipo-c-a-tipo-c-modo-141-sync-c-xaea-blanco-131",
+      "name": "CABLE TIPO C A TIPO C MODO-141 SYNC-C - XAEA- BLANCO",
+      "category": "Cables",
+      "imageKey": ""
+    },
+    {
+      "id": "auriculares-bt-modv-003n-varios-rosa-44",
+      "sku": "auriculares-bt-modv-003n-varios-rosa-44",
+      "name": "AURICULARES BT MODV-003N - VARIOS - ROSA",
+      "category": "Audio",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silicone-case-iph-17-pro-max-1411",
+      "sku": "tpu-silicone-case-iph-17-pro-max-1411",
+      "name": "TPU SILICONE CASE IPHONE 17 PRO MAX",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silicone-case-iph-17-pro-1410",
+      "sku": "tpu-silicone-case-iph-17-pro-1410",
+      "name": "TPU SILICONE CASE IPHONE 17 PRO",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silicone-case-iph-17-air-1409",
+      "sku": "tpu-silicone-case-iph-17-air-1409",
+      "name": "TPU SILICONE CASE IPHONE 17 AIR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silicone-case-iph-x-xs-1413",
+      "sku": "tpu-silicone-case-iph-x-xs-1413",
+      "name": "TPU SILICONE CASE IPHONE X/XS",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-clear-case-ip-16-1002",
+      "sku": "tpu-clear-case-ip-16-1002",
+      "name": "TPU CLEAR CASE IP 16",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silicone-case-iph-7-8-plus-1412",
+      "sku": "tpu-silicone-case-iph-7-8-plus-1412",
+      "name": "TPU SILICONE CASE IPHONE 7/8 PLUS",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-clear-case-ip-15-pro-max-1001",
+      "sku": "tpu-clear-case-ip-15-pro-max-1001",
+      "name": "TPU CLEAR CASE IP 15 PRO MAX",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silicone-case-iph-17-1408",
+      "sku": "tpu-silicone-case-iph-17-1408",
+      "name": "TPU SILICONE CASE IPHONE 17",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-acrilico-antishock-ip-17-air-vr-981",
+      "sku": "tpu-acrilico-antishock-ip-17-air-vr-981",
+      "name": "TPU ACRILICO ANTISHOCK IP 17 AIR - VR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-case-magsafe-ip-17-air-996",
+      "sku": "tpu-case-magsafe-ip-17-air-996",
+      "name": "TPU CASE MAGSAFE IP 17 AIR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-clear-case-ip-15-1000",
+      "sku": "tpu-clear-case-ip-15-1000",
+      "name": "TPU CLEAR CASE IP 15",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-clear-case-ip-11-pro-max-998",
+      "sku": "tpu-clear-case-ip-11-pro-max-998",
+      "name": "TPU CLEAR CASE IP 11 PRO MAX",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-acrilico-antishock-ip-17-vr-980",
+      "sku": "tpu-acrilico-antishock-ip-17-vr-980",
+      "name": "TPU ACRILICO ANTISHOCK IP 17 - VR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-clear-case-ip-12-pro-max-999",
+      "sku": "tpu-clear-case-ip-12-pro-max-999",
+      "name": "TPU CLEAR CASE IP 12 PRO MAX",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-clear-case-ip-11-997",
+      "sku": "tpu-clear-case-ip-11-997",
+      "name": "TPU CLEAR CASE IP 11",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-silky-glow-moto-g04-g04s-vr-1446",
+      "sku": "tpu-silky-glow-moto-g04-g04s-vr-1446",
+      "name": "TPU SILKY GLOW MOTO G04 / G04S VR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-curvy-xia-redmi-a5-vr-1005",
+      "sku": "tpu-curvy-xia-redmi-a5-vr-1005",
+      "name": "TPU CURVY XIA REDMI A5 VR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "tpu-super-silicona-sam-a25-negro-vr-1486",
+      "sku": "tpu-super-silicona-sam-a25-negro-vr-1486",
+      "name": "TPU SUPER SILICONA SAM A25 NEGRO VR",
+      "category": "Fundas",
+      "imageKey": ""
+    },
+    {
+      "id": "film-glass-antiespia-ip-17-359",
+      "sku": "film-glass-antiespia-ip-17-359",
+      "name": "FILM GLASS ANTIESPIA IP 17",
+      "category": "Vidrios y templados",
+      "imageKey": ""
+    },
+    {
+      "id": "film-glass-antiespia-ip-17-pro-360",
+      "sku": "film-glass-antiespia-ip-17-pro-360",
+      "name": "FILM GLASS ANTIESPIA IP 17 PRO",
+      "category": "Vidrios y templados",
+      "imageKey": ""
+    },
+    {
+      "id": "film-glass-antiespia-ip-17-pro-max-361",
+      "sku": "film-glass-antiespia-ip-17-pro-max-361",
+      "name": "FILM GLASS ANTIESPIA IP 17 PRO MAX",
+      "category": "Vidrios y templados",
+      "imageKey": ""
+    },
+    {
+      "id": "gasto-de-envio-410",
+      "sku": "gasto-de-envio-410",
+      "name": "GASTO DE ENVÍO",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "combo-cargador-de-pilas-mods-725-pilas-recargables-aaa-noga-229",
+      "sku": "combo-cargador-de-pilas-mods-725-pilas-recargables-aaa-noga-229",
+      "name": "COMBO CARGADOR DE PILAS MODS-725 + PILAS RECARGABLES AAA NOGA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "combo-cargador-de-pilas-mods-726-pilas-recargables-aaa-noga-230",
+      "sku": "combo-cargador-de-pilas-mods-726-pilas-recargables-aaa-noga-230",
+      "name": "COMBO CARGADOR DE PILAS MODS-726 + PILAS RECARGABLES AAA NOGA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "combo-cargador-de-pilas-mods-727-pilas-recargables-aaa-noga-231",
+      "sku": "combo-cargador-de-pilas-mods-727-pilas-recargables-aaa-noga-231",
+      "name": "COMBO CARGADOR DE PILAS MODS-727 + PILAS RECARGABLES AAA NOGA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "combo-cargador-de-pilas-mods-728-pilas-recargables-aaa-noga-232",
+      "sku": "combo-cargador-de-pilas-mods-728-pilas-recargables-aaa-noga-232",
+      "name": "COMBO CARGADOR DE PILAS MODS-728 + PILAS RECARGABLES AAA NOGA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "combo-cargador-de-pilas-mods-729-pilas-recargables-aaa-noga-233",
+      "sku": "combo-cargador-de-pilas-mods-729-pilas-recargables-aaa-noga-233",
+      "name": "COMBO CARGADOR DE PILAS MODS-729 + PILAS RECARGABLES AAA NOGA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "pilas-aaa-blister-recargable-noga-1100mah-757",
+      "sku": "pilas-aaa-blister-recargable-noga-1100mah-757",
+      "name": "PILAS AAA BLISTER RECARGABLE NOGA 1100MAH",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "cuello-mundial-argentina-2026-238",
+      "sku": "cuello-mundial-argentina-2026-238",
+      "name": "CUELLO MUNDIAL ARGENTINA 2026",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-ave-del-paraiso-jdmz-108-zumo-sin-color-243",
+      "sku": "encastrable-flor-ave-del-paraiso-jdmz-108-zumo-sin-color-243",
+      "name": "ENCASTRABLE FLOR AVE DEL PARAISO JDMZ-108 - ZUMO - SIN COLOR",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-calendula-jdmz-108-zumo-blanco-244",
+      "sku": "encastrable-flor-calendula-jdmz-108-zumo-blanco-244",
+      "name": "ENCASTRABLE FLOR CALENDULA JDMZ-108 - ZUMO - BLANCO",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-campanilla-jdmz-108-zumo-violeta-245",
+      "sku": "encastrable-flor-campanilla-jdmz-108-zumo-violeta-245",
+      "name": "ENCASTRABLE FLOR CAMPANILLA JDMZ-108 - ZUMO - VIOLETA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-cineraria-jdmz-108-zumo-rosa-242",
+      "sku": "encastrable-flor-cineraria-jdmz-108-zumo-rosa-242",
+      "name": "ENCASTRABLE FLOR CINERARIA JDMZ-108 - ZUMO - ROSA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-cerezo-jdmz-107-zumo-violeta-246",
+      "sku": "encastrable-flor-de-cerezo-jdmz-107-zumo-violeta-246",
+      "name": "ENCASTRABLE FLOR DE CEREZO JDMZ-107 - ZUMO - VIOLETA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-manzano-japones-jdmz-108-zumo-violeta-249",
+      "sku": "encastrable-flor-de-manzano-japones-jdmz-108-zumo-violeta-249",
+      "name": "ENCASTRABLE FLOR DE MANZANO JAPONES JDMZ-108 - ZUMO - VIOLETA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-orquidea-blanca-jdmz-107-zumo-blanco-250",
+      "sku": "encastrable-flor-de-orquidea-blanca-jdmz-107-zumo-blanco-250",
+      "name": "ENCASTRABLE FLOR DE ORQUIDEA BLANCA JDMZ-107 - ZUMO - BLANCO",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-orquidea-exotica-jdmz-107-zumo-lila-251",
+      "sku": "encastrable-flor-de-orquidea-exotica-jdmz-107-zumo-lila-251",
+      "name": "ENCASTRABLE FLOR DE ORQUIDEA EXOTICA JDMZ-107 - ZUMO - LILA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-trebol-florido-jdmz-107-zumo-rojo-252",
+      "sku": "encastrable-flor-de-trebol-florido-jdmz-107-zumo-rojo-252",
+      "name": "ENCASTRABLE FLOR DE TREBOL FLORIDO JDMZ-107 - ZUMO - ROJO",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-del-pavo-real-jdmz-108-zumo-sin-color-253",
+      "sku": "encastrable-flor-del-pavo-real-jdmz-108-zumo-sin-color-253",
+      "name": "ENCASTRABLE FLOR DEL PAVO REAL JDMZ-108 - ZUMO - SIN COLOR",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-francesilla-jdmz-108-zumo-rosa-254",
+      "sku": "encastrable-flor-francesilla-jdmz-108-zumo-rosa-254",
+      "name": "ENCASTRABLE FLOR FRANCESILLA JDMZ-108 - ZUMO - ROSA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-pico-de-oro-jdmz-107-zumo-amarillo-256",
+      "sku": "encastrable-flor-pico-de-oro-jdmz-107-zumo-amarillo-256",
+      "name": "ENCASTRABLE FLOR PICO DE ORO JDMZ-107 - ZUMO - AMARILLO",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-rosa-mistica-jdmz-108-zumo-rosa-257",
+      "sku": "encastrable-flor-rosa-mistica-jdmz-108-zumo-rosa-257",
+      "name": "ENCASTRABLE FLOR ROSA MISTICA JDMZ-108 - ZUMO - ROSA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-duraznero-jdmz-107-zumo-rosa-247",
+      "sku": "encastrable-flor-de-duraznero-jdmz-107-zumo-rosa-247",
+      "name": "ENCASTRABLE FLOR DE DURAZNERO JDMZ-107 - ZUMO - ROSA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-de-lila-jdmz-107-zumo-lila-248",
+      "sku": "encastrable-flor-de-lila-jdmz-107-zumo-lila-248",
+      "name": "ENCASTRABLE FLOR DE LILA JDMZ-107 - ZUMO - LILA",
+      "category": "Otros",
+      "imageKey": ""
+    },
+    {
+      "id": "encastrable-flor-loto-silvestre-jdmz-107-zumo-amarillo-255",
+      "sku": "encastrable-flor-loto-silvestre-jdmz-107-zumo-amarillo-255",
+      "name": "ENCASTRABLE FLOR LOTO SILVESTRE JDMZ-107 - ZUMO - AMARILLO",
+      "category": "Otros",
+      "imageKey": ""
+    }
+  ],
+  "external_images": [
+    {
+      "id": "cargador-iphone-certificado-tipo-c-35w-1782547028216",
+      "name": "CARGADOR IPHONE CERTIFICADO TIPO C 35W",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_600992-MLA92849420541_092025-O.webp"
+    }
+  ],
+  "build_pages": 1540,
+  "build_command": "npm run build",
+  "route_validation": {
+    "dev_server": "http://127.0.0.1:4321",
+    "checked_routes": [
+      "/",
+      "/minorista",
+      "/mayorista",
+      "/catalogo",
+      "/admin",
+      "/api/products"
+    ],
+    "routes_status": "passed",
+    "api_products_count": 1530,
+    "sample_image": "/img/products/cargador-iphone-certificado-tipo-c-20w-07d7bad98f.jpg",
+    "sample_image_status": 200,
+    "minorista_has_real_product": true,
+    "mayorista_has_real_product": true,
+    "missing_local_images": 0
+  }
+}

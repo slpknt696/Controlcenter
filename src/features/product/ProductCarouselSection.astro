@@ -1,0 +1,32 @@
+---
+import { featuredProducts } from '~/lib/catalog.js';
+import ProductCard from './ProductCard.astro';
+
+type Props = {
+	heading: string;
+	mode?: 'minorista' | 'mayorista';
+	products?: any[];
+};
+
+const { heading, mode = 'minorista', products = featuredProducts(12, mode) } = Astro.props;
+---
+
+<section id="products" aria-labelledby="products-heading" class="grid gap-4">
+	<header class="flex items-end justify-between gap-4">
+		<h2 id="products-heading" class="text-3xl font-bold text-theme-base-900">{heading}</h2>
+		<a class="text-sm font-bold uppercase text-theme-base-600 hover:text-theme-base-900" href={mode === 'mayorista' ? '/mayorista' : '/minorista'}>
+			Ver todo
+		</a>
+	</header>
+	<div class="-mx-4 overflow-x-auto px-4">
+		<ul class="flex w-max gap-5 pb-4">
+			{
+				products.map((product, idx) => (
+					<li class="w-72 shrink-0 snap-start">
+						<ProductCard product={product} mode={mode} imageLoading={idx === 0 ? 'eager' : 'lazy'} />
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>

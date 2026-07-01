@@ -1,0 +1,222 @@
+---
+import ProductCard from '~/features/product/ProductCard.astro';
+import { categories } from '~/lib/catalog.js';
+import { sitePath } from '~/lib/asset-base.js';
+
+interface Props {
+	products: any[];
+	mode?: 'minorista' | 'mayorista';
+	title: string;
+	description?: string;
+}
+
+const { products, mode = 'minorista', title, description = '' } = Astro.props;
+const currentCategory = Astro.url.searchParams.get('categoria') || '';
+const catalogApiPath = mode === 'mayorista' ? '/api/products/mayorista.json' : '/api/products/minorista.json';
+---
+
+<section class="grid gap-6" aria-labelledby="catalog-heading">
+	<header class="flex flex-wrap items-end justify-between gap-4">
+		<div>
+			<p class="text-sm font-bold uppercase text-theme-base-500" data-catalog-mode-label>{mode === 'mayorista' ? 'Canal mayorista' : 'Venta minorista'}</p>
+			<h1 id="catalog-heading" class="text-4xl font-extrabold text-theme-base-900">{title}</h1>
+			{description && <p class="mt-2 max-w-2xl text-theme-base-600">{description}</p>}
+		</div>
+		<p class="font-semibold text-theme-base-600" data-result-count>{products.length} productos</p>
+	</header>
+
+	<div class="grid gap-3 border-y border-theme-base-300 py-4 md:grid-cols-[1fr_16rem]">
+		<label class="grid gap-1 text-sm font-semibold text-theme-base-700">
+			Buscar
+			<input data-catalog-search class="h-11 border border-theme-base-300 px-3 font-normal" type="search" placeholder="Nombre, marca o categoria" />
+		</label>
+		<label class="grid gap-1 text-sm font-semibold text-theme-base-700">
+			Categoria
+			<select data-category-filter class="h-11 border border-theme-base-300 px-3 font-normal">
+				<option value="">Todas</option>
+				{categories().map((category) => <option value={category} selected={category === currentCategory}>{category}</option>)}
+			</select>
+		</label>
+	</div>
+
+	<div class="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-4" data-catalog-grid data-mode={mode} data-api={sitePath(catalogApiPath)}>
+		{products.map((product) => <ProductCard product={product} mode={mode} />)}
+	</div>
+
+	<p class="hidden border border-theme-base-300 bg-theme-base-100 p-6 text-center font-semibold text-theme-base-600" data-empty-state>
+		No hay productos para ese filtro.
+	</p>
+</section>
+
+<script>
+	import { toCatalogGridClientProductCardViewModel } from '~/presentation/adapters/catalogGridClientAdapter';
+
+	const search = document.querySelector('[data-catalog-search]');
+	const category = document.querySelector('[data-category-filter]');
+	const grid = document.querySelector('[data-catalog-grid]');
+	let cards = Array.from(document.querySelectorAll('[data-product-card]'));
+	const count = document.querySelector('[data-result-count]');
+	const empty = document.querySelector('[data-empty-state]');
+	const publicBase = import.meta.env.BASE_URL || '/';
+	const withBase = (path) => {
+		if (!path) return '';
+		if (/^(https?:)?\/\//.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+		const cleanBase = publicBase === '/' ? '' : publicBase.replace(/\/$/, '');
+		const cleanPath = path.startsWith('/') ? path : `/${path}`;
+		return `${cleanBase}${cleanPath}` || '/';
+	};
+	const productsApiPathForMode = (currentMode) =>
+		currentMode === 'mayorista' ? '/api/products/mayorista.json' : '/api/products/minorista.json';
+	const requestedMode = new URLSearchParams(window.location.search).get('modo');
+	const mode = requestedMode === 'mayorista' ? 'mayorista' : (grid?.dataset.mode || 'minorista');
+	const modeLabel = document.querySelector('[data-catalog-mode-label]');
+	if (grid) {
+		grid.dataset.mode = mode;
+		grid.dataset.api = withBase(productsApiPathForMode(mode));
+	}
+	if (modeLabel) {
+		modeLabel.textContent = mode === 'mayorista' ? 'Canal mayorista' : 'Venta minorista';
+	}
+
+	function formatPriceLabel(value) {
+		if (value === null || value === undefined || Number.isNaN(Number(value))) return 'pendiente';
+		return '$' + new Intl.NumberFormat('es-AR').format(Math.round(Number(value)));
+	}
+
+	const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#39;',
+	}[char]));
+
+	function resolveProductImage(product) {
+		const raw = product.image_url || product.imagen || product.imageUrl || (product.r2_key ? `/img/products/${String(product.r2_key).split('/').pop()}` : '/assets/placeholders/otros.svg');
+		return withBase(raw);
+	}
+
+	function resolveProductPrice(product) {
+		return mode === 'mayorista'
+			? product.precio_mayorista ?? product.precio_minorista
+			: product.precio_minorista;
+	}
+
+	function buildLegacyCartPayload(product) {
+		return {
+			id: `${product.id}:${mode}`,
+			productId: product.id,
+			sku: product.sku,
+			nombre: product.nombre,
+			marca: product.marca,
+			categoria: product.categoria,
+			precio: resolveProductPrice(product),
+			imagen: resolveProductImage(product),
+			mode,
+		};
+	}
+
+	function calculateLegacyDiscountPercent(product) {
+		return product.precio_minorista && product.precio_mayorista && product.precio_mayorista < product.precio_minorista
+			? Math.round((1 - product.precio_mayorista / product.precio_minorista) * 100)
+			: 0;
+	}
+
+	function buildClientProductCardViewModel(product) {
+		return toCatalogGridClientProductCardViewModel(product, mode, {
+			withBase,
+			resolveProductImage,
+			resolveProductPrice,
+			formatPriceLabel,
+			calculateLegacyDiscountPercent,
+			buildLegacyCartPayload,
+		});
+	}
+
+	function buildLegacyDiscountBadge(discountPercent) {
+		const safeDiscountPercent = Number.isFinite(Number(discountPercent)) ? Math.round(Number(discountPercent)) : 0;
+		return mode === 'mayorista' && safeDiscountPercent > 0
+			? `<span class="absolute left-3 top-3 bg-theme-base-900 px-3 py-1 text-xs font-bold uppercase text-white">Mayorista -${escapeHtml(safeDiscountPercent)}%</span>`
+			: '';
+	}
+
+	function buildProductCardHtml(product) {
+		const productCard = buildClientProductCardViewModel(product);
+		const badge = buildLegacyDiscountBadge(productCard.discountPercent);
+		const safeHref = escapeHtml(productCard.href);
+		const safeImageSrc = escapeHtml(productCard.imageSrc);
+		const safePriceLabel = escapeHtml(productCard.priceLabel);
+		const safeCartPayload = escapeHtml(JSON.stringify(productCard.cartPayload));
+		const safeDataName = escapeHtml(productCard.dataName);
+		const safeDataCategory = escapeHtml(productCard.dataCategory);
+		const safeName = escapeHtml(productCard.name);
+		const safeBrand = escapeHtml(productCard.brand);
+		const safeStock = escapeHtml(productCard.stock);
+		const safeCategory = escapeHtml(productCard.category);
+
+		return `
+				<article class="group relative block w-full focus-visible:ring-0" data-product-card data-name="${safeDataName}" data-category="${safeDataCategory}">
+					<a href="${safeHref}" aria-label="Abrir ${safeName}">
+						<div class="relative flex aspect-[5/6] items-center justify-center bg-theme-base-100">
+							<img src="${safeImageSrc}" alt="${safeName}" width="290" height="290" loading="lazy" draggable="false" class="max-h-[82%] max-w-[82%] object-contain transition duration-300 group-hover:scale-105" />
+							${badge}
+						</div>
+						<div class="flex flex-col gap-2 p-2 font-medium">
+							<p class="text-xs uppercase text-theme-base-500">${safeCategory}</p>
+							<h3 class="text-pretty leading-tight text-theme-base-900">${safeName}</h3>
+							<p class="text-sm text-theme-base-600">${safeBrand} - Stock ${safeStock}</p>
+							<p class="text-lg/tight text-theme-base-600">${safePriceLabel}</p>
+						</div>
+					</a>
+					<button type="button" class="mx-2 mb-2 h-10 bg-theme-base-900 px-4 text-sm font-semibold uppercase text-white transition hover:bg-theme-base-600" data-add-cart data-label="Agregar" data-product='${safeCartPayload}'>Agregar</button>
+					<div class="pointer-events-none absolute inset-0 ring-inset ring-theme-base-900 group-focus-within:ring-2"></div>
+				</article>
+			`;
+	}
+
+	function buildProductListHtml(products) {
+		return products.map((product) => buildProductCardHtml(product)).join('');
+	}
+
+	function renderProducts(products) {
+		if (!grid || !Array.isArray(products) || !products.length) return;
+		grid.innerHTML = buildProductListHtml(products);
+		cards = Array.from(document.querySelectorAll('[data-product-card]'));
+		applyFilters();
+	}
+
+	function applyFilters() {
+		const term = (search?.value || '').trim().toLowerCase();
+		const selected = category?.value || '';
+		let visible = 0;
+
+		for (const card of cards) {
+			const matchesTerm = !term || (card.dataset.name || '').includes(term);
+			const matchesCategory = !selected || card.dataset.category === selected;
+			const show = matchesTerm && matchesCategory;
+			card.classList.toggle('hidden', !show);
+			if (show) visible += 1;
+		}
+
+		if (count) count.textContent = `${visible} productos`;
+		if (empty) empty.classList.toggle('hidden', visible > 0);
+	}
+
+	search?.addEventListener('input', applyFilters);
+	category?.addEventListener('change', applyFilters);
+	applyFilters();
+
+	async function hydrateFromD1() {
+		if (!grid?.dataset.api) return;
+		try {
+			const response = await fetch(grid.dataset.api, { headers: { accept: 'application/json' } });
+			if (!response.ok) return;
+			const data = await response.json();
+			if (data?.ok && Array.isArray(data.products)) renderProducts(data.products);
+		} catch {
+			// Astro dev keeps the server-rendered real catalog when the API is unavailable.
+		}
+	}
+
+	hydrateFromD1();
+</script>

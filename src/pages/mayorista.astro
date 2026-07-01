@@ -1,0 +1,18 @@
+---
+import CatalogGrid from '~/components/CatalogGrid.astro';
+import PrimaryLayout from '~/layouts/PrimaryLayout.astro';
+import { productsForMode } from '~/lib/catalog.js';
+---
+
+<PrimaryLayout title="Catalogo mayorista | Control Center">
+	<main class="breakout py-10">
+		<div class="content">
+			<CatalogGrid
+				products={productsForMode('mayorista')}
+				mode="mayorista"
+				title="Catalogo mayorista"
+				description="Precios mayoristas separados del canal minorista, con stock y categorias del catalogo real."
+			/>
+		</div>
+	</main>
+</PrimaryLayout>

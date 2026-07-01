@@ -1,0 +1,36 @@
+---
+import { publicProductsForMode } from '../../lib/catalog.js';
+
+const DEFAULT_MODE = 'minorista';
+const VALID_MODES = new Set(['minorista', 'mayorista']);
+const OFFICIAL_CONTRACTS = {
+	minorista: '/api/products/minorista.json',
+	mayorista: '/api/products/mayorista.json',
+};
+
+function normalizeMode(value: string | null) {
+	return value && VALID_MODES.has(value) ? value : DEFAULT_MODE;
+}
+
+const mode = normalizeMode(Astro.url.searchParams.get('mode'));
+const products = publicProductsForMode(mode);
+
+return new Response(
+	JSON.stringify({
+		ok: true,
+		legacy: true,
+		contract: 'legacy-temporary',
+		officialContracts: OFFICIAL_CONTRACTS,
+		source: 'controlcenter-products.json',
+		mode,
+		count: products.length,
+		products,
+	}),
+	{
+		headers: {
+			'content-type': 'application/json; charset=utf-8',
+			'cache-control': 'no-store',
+		},
+	},
+);
+---

@@ -1,0 +1,19 @@
+---
+import CollectionCard from './CollectionCard.astro';
+import { categoryCards } from '~/lib/catalog.js';
+
+export interface Props {
+	heading?: string;
+}
+
+const HEADING_ID = 'collection-section-heading';
+const { heading = 'Comprar por categoria' } = Astro.props;
+const collections = categoryCards();
+---
+
+<section aria-labelledby={HEADING_ID} class="grid gap-4">
+	<h2 id={HEADING_ID} class="text-3xl font-bold text-theme-base-900">{heading}</h2>
+	<div class="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
+		{collections.map((collection) => <CollectionCard {...collection} />)}
+	</div>
+</section>

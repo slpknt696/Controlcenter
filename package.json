@@ -1,0 +1,35 @@
+{
+  "name": "control-center-astro-storefront",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+	"scripts": {
+		"backup:r2": "powershell -ExecutionPolicy Bypass -File scripts/backup-r2.ps1",
+		"controlcenter:migrate": "node scripts/controlcenter-migrate.mjs",
+		"finalize:real-store": "node scripts/finalize-real-store.mjs",
+		"db:schema": "wrangler d1 execute controlcenter_test --local --file migrations/0001_schema.sql",
+		"db:import": "npm run finalize:real-store && wrangler d1 execute controlcenter_test --local --file controlcenter-migration/d1/database.sql",
+		"dev": "astro dev",
+		"dev:wrangler": "npm run build && wrangler dev --local --persist-to .wrangler/state --port 8787",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "wrangler dev --local --persist-to .wrangler/state --port 8787",
+		"astro": "astro"
+	},
+  "dependencies": {
+    "@fontsource-variable/inter": "latest",
+    "@tailwindcss/typography": "^0.5.16",
+    "astro": "^7.0.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwind-merge": "latest",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7"
+	},
+	"devDependencies": {
+		"tsx": "^4.20.6",
+		"typescript": "latest",
+		"wrangler": "^4.55.0"
+	}
+}

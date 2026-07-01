@@ -1,0 +1,97 @@
+---
+import PrimaryLayout from '~/layouts/PrimaryLayout.astro';
+import { allProducts, catalogStats, formatMoney, productImage } from '~/lib/catalog.js';
+import report from '~/data/migration-report.json';
+
+const stats = catalogStats();
+---
+
+<PrimaryLayout title="Admin local | Control Center">
+	<main class="breakout py-10">
+		<section class="content grid gap-8">
+			<header>
+				<p class="text-sm font-bold uppercase text-theme-base-500">Admin local</p>
+				<h1 class="mt-2 text-4xl font-extrabold text-theme-base-900">Resumen de catalogo</h1>
+				<p class="mt-2 text-theme-base-600">Panel read-only. No escribe en D1, R2 ni produccion.</p>
+			</header>
+			<div class="grid gap-4 md:grid-cols-4">
+				<article class="bg-theme-base-100 p-5"><strong class="text-3xl" data-admin-total>{stats.total}</strong><p>Total productos</p></article>
+				<article class="bg-theme-base-100 p-5"><strong class="text-3xl" data-admin-without-image>{stats.withoutImage}</strong><p>Sin imagen</p></article>
+				<article class="bg-theme-base-100 p-5"><strong class="text-3xl" data-admin-without-price>{stats.withoutPrice}</strong><p>Sin precio</p></article>
+				<article class="bg-theme-base-100 p-5"><strong class="text-3xl" data-admin-without-stock>{stats.withoutStock}</strong><p>Sin stock</p></article>
+			</div>
+			<p class="text-sm text-theme-base-600" data-admin-source>Migrados desde ZIP: {report.migrated_products}</p>
+			<div class="overflow-x-auto border border-theme-base-300">
+				<table class="w-full min-w-[900px] text-left text-sm">
+					<thead class="bg-theme-base-100 uppercase text-theme-base-600">
+						<tr><th class="p-3">Imagen</th><th class="p-3">Producto</th><th class="p-3">Categoria</th><th class="p-3">Minorista</th><th class="p-3">Mayorista</th><th class="p-3">Stock</th></tr>
+					</thead>
+					<tbody data-admin-products>
+						{allProducts.map((product) => (
+							<tr class="border-t border-theme-base-300">
+								<td class="p-3"><img src={productImage(product)} alt="" class="h-14 w-14 object-contain" /></td>
+								<td class="p-3"><strong>{product.nombre}</strong><p class="text-theme-base-500">{product.sku}</p></td>
+								<td class="p-3">{product.categoria}</td>
+								<td class="p-3">{formatMoney(product.precio_minorista)}</td>
+								<td class="p-3">{formatMoney(product.precio_mayorista)}</td>
+								<td class="p-3">{product.stock ?? 'pendiente'}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</main>
+</PrimaryLayout>
+
+<script>
+	const money = (value) => {
+		if (value === null || value === undefined || Number.isNaN(Number(value))) return 'pendiente';
+		return '$' + new Intl.NumberFormat('es-AR').format(Math.round(Number(value)));
+	};
+	const publicBase = import.meta.env.BASE_URL || '/';
+	const withBase = (path) => {
+		if (!path) return '';
+		if (/^(https?:)?\/\//.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+		const cleanBase = publicBase === '/' ? '' : publicBase.replace(/\/$/, '');
+		const cleanPath = path.startsWith('/') ? path : `/${path}`;
+		return `${cleanBase}${cleanPath}` || '/';
+	};
+	const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#39;',
+	}[char]));
+
+	async function hydrateAdminFromD1() {
+		try {
+			const productsResponse = await fetch(withBase('/api/products?mode=minorista'), { headers: { accept: 'application/json' } });
+			if (!productsResponse.ok) return;
+			const productsData = await productsResponse.json();
+			if (productsData?.ok && Array.isArray(productsData.products)) {
+				const products = productsData.products;
+				document.querySelector('[data-admin-total]').textContent = String(products.length);
+				document.querySelector('[data-admin-without-image]').textContent = String(products.filter((product) => !product.imagen || product.imagen.includes('/placeholders/')).length);
+				document.querySelector('[data-admin-without-price]').textContent = String(products.filter((product) => !product.precio_minorista && !product.precio_mayorista).length);
+				document.querySelector('[data-admin-without-stock]').textContent = String(products.filter((product) => product.stock === null || Number(product.stock) <= 0).length);
+				document.querySelector('[data-admin-source]').textContent = `Fuente actual: catalogo real local (${products.length} productos)`;
+				document.querySelector('[data-admin-products]').innerHTML = productsData.products.map((product) => `
+					<tr class="border-t border-theme-base-300">
+						<td class="p-3"><img src="${escapeHtml(withBase(product.imagen || '/assets/placeholders/otros.svg'))}" alt="" class="h-14 w-14 object-contain" /></td>
+						<td class="p-3"><strong>${escapeHtml(product.nombre)}</strong><p class="text-theme-base-500">${escapeHtml(product.sku)}</p></td>
+						<td class="p-3">${escapeHtml(product.categoria)}</td>
+						<td class="p-3">${money(product.precio_minorista)}</td>
+						<td class="p-3">${money(product.precio_mayorista)}</td>
+						<td class="p-3">${escapeHtml(product.stock ?? 'pendiente')}</td>
+					</tr>
+				`).join('');
+			}
+		} catch {
+			// Queda visible el render estatico con los mismos productos reales.
+		}
+	}
+
+	hydrateAdminFromD1();
+</script>

@@ -1,0 +1,31 @@
+---
+import { button } from '~/styles.ts';
+import { assetUrl, sitePath } from '~/lib/asset-base.js';
+---
+
+<header
+	class="breakout focus-ring-light relative h-[384px] max-h-dvh content-end justify-items-start gap-y-4 bg-black py-8 text-white md:h-[512px] md:gap-y-8 md:bg-bottom"
+>
+	<picture>
+		<img
+			src={assetUrl('/assets/brand/banner.webp')}
+			alt=""
+			class="breakout absolute inset-0 size-full object-cover object-center opacity-70"
+		/>
+	</picture>
+	<div
+		class="content relative text-4xl font-extrabold drop-shadow-md md:text-5xl md:leading-[50px]"
+	>
+		<h1 class="max-w-sm">Control Center.</h1>
+		<p class="mt-4 max-w-xl text-base font-semibold text-theme-base-100 md:text-lg">
+			Catalogo local de accesorios, tecnologia y servicio tecnico con canal minorista y mayorista.
+		</p>
+	</div>
+	<div class="relative">
+		<a
+			href={sitePath('/minorista')}
+			class={button({ theme: 'light', className: 'font-bold md:h-12 md:text-lg' })}
+			>Comprar ahora</a
+		>
+	</div>
+</header>

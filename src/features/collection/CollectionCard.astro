@@ -1,0 +1,36 @@
+---
+import { button } from '~/styles.ts';
+import { sitePath } from '~/lib/asset-base.js';
+
+export interface Props {
+	name: string;
+	slug: string;
+	imageUrl?: string;
+	count?: number;
+	cta?: string;
+}
+---
+
+<div class="relative flex bg-theme-base-100">
+	<a href={sitePath(`/minorista?categoria=${encodeURIComponent(Astro.props.name)}`)} class="w-full">
+		<article class="flex flex-col items-start gap-3 p-6">
+			{
+				Astro.props.imageUrl && (
+					<img
+						src={Astro.props.imageUrl}
+						alt=""
+						class="aspect-square max-h-64 self-center object-contain"
+						loading="lazy"
+					/>
+				)
+			}
+			<p class="text-pretty text-3xl font-semibold">
+				{Astro.props.name}
+			</p>
+			<p class="text-sm font-medium text-theme-base-600">{Astro.props.count ?? 0} productos</p>
+			<p class={button()}>
+				{Astro.props.cta ?? 'Ver categoria'}
+			</p>
+		</article>
+	</a>
+</div>

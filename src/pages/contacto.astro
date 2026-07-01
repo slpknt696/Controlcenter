@@ -1,0 +1,20 @@
+---
+import PrimaryLayout from '~/layouts/PrimaryLayout.astro';
+import { button } from '~/styles.ts';
+---
+
+<PrimaryLayout title="Contacto | Control Center">
+	<main class="breakout py-12">
+		<section class="content max-w-3xl">
+			<p class="text-sm font-bold uppercase text-theme-base-500">Contacto</p>
+			<h1 class="mt-2 text-4xl font-extrabold text-theme-base-900">Consulta</h1>
+			<p class="mt-4 text-theme-base-600">Dejanos tu consulta y coordinamos disponibilidad, retiro o envio.</p>
+			<form class="mt-8 grid gap-4">
+				<label class="grid gap-1 font-semibold">Nombre<input class="h-11 border border-theme-base-300 px-3 font-normal" type="text" /></label>
+				<label class="grid gap-1 font-semibold">Telefono<input class="h-11 border border-theme-base-300 px-3 font-normal" type="tel" /></label>
+				<label class="grid gap-1 font-semibold">Mensaje<textarea class="min-h-32 border border-theme-base-300 p-3 font-normal"></textarea></label>
+				<button class={button({ className: 'w-fit' })} type="button">Preparar consulta</button>
+			</form>
+		</section>
+	</main>
+</PrimaryLayout>

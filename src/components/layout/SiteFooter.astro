@@ -1,0 +1,29 @@
+---
+import { sitePath } from '~/lib/asset-base.js';
+
+export interface Props {
+	class?: string;
+}
+---
+
+<footer class={Astro.props.class}>
+	<section class="flex flex-wrap items-center justify-between gap-y-3 py-4">
+		<div>
+			<p class="text-lg font-bold text-theme-base-900">Control Center</p>
+			<p class="text-sm text-theme-base-600">Accesorios, tecnologia y servicio tecnico.</p>
+		</div>
+		<nav class="flex flex-wrap gap-4 text-sm font-semibold text-theme-base-700" aria-label="Footer">
+			<a href={sitePath('/minorista')} class="hover:text-theme-base-900">Minorista</a>
+			<a href={sitePath('/mayorista')} class="hover:text-theme-base-900">Mayorista</a>
+			<a href={sitePath('/servicio-tecnico')} class="hover:text-theme-base-900">Servicio tecnico</a>
+			<a href={sitePath('/contacto')} class="hover:text-theme-base-900">Contacto</a>
+		</nav>
+	</section>
+
+	<div class="border-b border-theme-base-300"></div>
+
+	<section class="flex flex-wrap justify-between gap-y-2 py-6 text-sm text-theme-base-600">
+		<p>Atencion minorista y mayorista con retiro o coordinacion por contacto.</p>
+		<p>Total carrito: <span data-cart-total-label>$0</span></p>
+	</section>
+</footer>

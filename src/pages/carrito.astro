@@ -1,0 +1,90 @@
+---
+import PrimaryLayout from '~/layouts/PrimaryLayout.astro';
+import { button } from '~/styles.ts';
+---
+
+<PrimaryLayout title="Carrito | Control Center">
+	<main class="breakout py-10">
+		<div class="content grid gap-8 lg:grid-cols-[1fr_22rem]">
+			<section>
+				<h1 class="text-4xl font-extrabold text-theme-base-900">Carrito</h1>
+				<p class="mt-2 text-theme-base-600">Armá tu pedido y revisá subtotal, descuentos y total antes de coordinar la compra.</p>
+				<div class="mt-8 grid gap-4" data-cart-page-items></div>
+			</section>
+			<aside class="h-fit border border-theme-base-300 bg-theme-base-100 p-6">
+				<h2 class="text-2xl font-bold">Resumen</h2>
+				<dl class="mt-5 grid grid-cols-[1fr_auto] gap-3 text-theme-base-700">
+					<dt>Subtotal</dt><dd data-cart-page-subtotal>$0</dd>
+					<dt>Descuento</dt><dd data-cart-page-discount>$0</dd>
+					<dt class="border-t border-theme-base-300 pt-3 font-bold">Total</dt><dd class="border-t border-theme-base-300 pt-3 font-bold" data-cart-page-total>$0</dd>
+				</dl>
+				<p class="mt-4 text-sm text-theme-base-600" data-cart-page-note></p>
+				<button class={button({ className: 'mt-5 w-full' })} type="button" data-cart-clear-page>Vaciar carrito</button>
+			</aside>
+		</div>
+	</main>
+</PrimaryLayout>
+
+<script>
+	import { clearCart, readCart, removeFromCart, summarizeCart, updateCartQty } from '../utils/cartLogic.js';
+
+	const money = (value) => '$' + new Intl.NumberFormat('es-AR').format(Math.round(Number(value) || 0));
+	const publicBase = import.meta.env.BASE_URL || '/';
+	const withBase = (path) => {
+		if (!path) return '';
+		if (/^(https?:)?\/\//.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+		const cleanBase = publicBase === '/' ? '' : publicBase.replace(/\/$/, '');
+		const cleanPath = path.startsWith('/') ? path : `/${path}`;
+		return `${cleanBase}${cleanPath}` || '/';
+	};
+	const itemsBox = document.querySelector('[data-cart-page-items]');
+	const subtotal = document.querySelector('[data-cart-page-subtotal]');
+	const discount = document.querySelector('[data-cart-page-discount]');
+	const total = document.querySelector('[data-cart-page-total]');
+	const note = document.querySelector('[data-cart-page-note]');
+
+	function render() {
+		const items = readCart();
+		const summary = summarizeCart(items);
+		itemsBox.innerHTML = items.length
+			? items.map((item) => `
+				<article class="grid gap-4 border border-theme-base-300 p-4 md:grid-cols-[6rem_1fr_auto]">
+					<img src="${withBase(item.imagen)}" alt="" class="aspect-square w-24 object-contain bg-theme-base-100" />
+					<div>
+						<p class="font-bold text-theme-base-900">${item.nombre}</p>
+						<p class="text-sm text-theme-base-600">${item.categoria} - ${item.mode}</p>
+						<p class="mt-1 font-semibold">${money(item.precio)}</p>
+					</div>
+					<div class="flex items-center gap-2">
+						<input class="h-10 w-20 border border-theme-base-300 px-2" type="number" min="1" value="${item.qty}" data-cart-qty="${item.id}" />
+						<button class="h-10 border border-theme-base-300 px-3 text-sm font-bold uppercase" type="button" data-cart-remove="${item.id}">Quitar</button>
+					</div>
+				</article>
+			`).join('')
+			: '<p class="border border-theme-base-300 bg-theme-base-100 p-6 text-center font-semibold text-theme-base-600">El carrito esta vacio.</p>';
+		subtotal.textContent = money(summary.subtotal);
+		discount.textContent = '-' + money(summary.discount);
+		total.textContent = money(summary.total);
+		note.textContent = summary.chargerCablePairs > 0 ? `Combo cargador + cable aplicado: ${summary.chargerCablePairs} combo(s) con 10% OFF.` : 'El descuento se aplica cuando hay al menos un cargador y un cable.';
+	}
+
+	document.addEventListener('change', (event) => {
+		const input = event.target.closest('[data-cart-qty]');
+		if (!input) return;
+		updateCartQty(input.dataset.cartQty, Number(input.value) || 1);
+		render();
+	});
+	document.addEventListener('click', (event) => {
+		const remove = event.target.closest('[data-cart-remove]');
+		if (remove) {
+			removeFromCart(remove.dataset.cartRemove);
+			render();
+		}
+		if (event.target.closest('[data-cart-clear-page]')) {
+			clearCart();
+			render();
+		}
+	});
+	window.addEventListener('control-center-cart-updated', render);
+	render();
+</script>

@@ -1,0 +1,15 @@
+name = "control-center-astro-storefront"
+main = "src/worker.js"
+compatibility_date = "2026-06-29"
+
+assets = { directory = "./dist", binding = "ASSETS" }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "controlcenter_test"
+database_id = "controlcenter_test_local"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "PRODUCT_IMAGES"
+bucket_name = "controlcenter2"

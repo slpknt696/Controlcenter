@@ -1,0 +1,72 @@
+---
+import { asCartProduct, formatMoney, productImage, productPrice } from '~/lib/catalog.js';
+import { sitePath } from '~/lib/asset-base.js';
+import {
+	toProductCardViewModelFromLegacy,
+	type LegacyProductCardInput,
+	type LegacyProductCardMode,
+} from '~/presentation/adapters';
+
+interface Props {
+	product: LegacyProductCardInput;
+	mode?: LegacyProductCardMode;
+	class?: string;
+	imageLoading?: 'eager' | 'lazy';
+}
+
+const { product, mode = 'minorista', class: className = '', imageLoading = 'lazy' } = Astro.props;
+const productViewModel = toProductCardViewModelFromLegacy(product, mode, {
+	productPrice,
+	formatMoney,
+	productImage,
+	asCartProduct,
+	sitePath,
+	resolveDiscountPercent: (legacyProduct, currentMode) =>
+		currentMode === 'mayorista' &&
+		legacyProduct.precio_minorista &&
+		legacyProduct.precio_mayorista &&
+		legacyProduct.precio_mayorista < legacyProduct.precio_minorista
+			? Math.round((1 - legacyProduct.precio_mayorista / legacyProduct.precio_minorista) * 100)
+			: 0,
+});
+const cartProduct = productViewModel.legacy.cartPayload;
+const productHref = productViewModel.href;
+const discount = productViewModel.price.discountPercent ?? 0;
+---
+
+<article class={`group relative block w-full focus-visible:ring-0 ${className}`} data-product-card data-name={`${product.nombre} ${product.marca} ${product.categoria}`.toLowerCase()} data-category={product.categoria}>
+	<a href={productHref} aria-label={`Abrir ${product.nombre}`}>
+		<div class="relative flex aspect-[5/6] items-center justify-center bg-theme-base-100">
+			<img
+				src={productViewModel.image.src}
+				alt={product.nombre}
+				width="290"
+				height="290"
+				loading={imageLoading}
+				draggable="false"
+				class="max-h-[82%] max-w-[82%] object-contain transition duration-300 group-hover:scale-105"
+			/>
+			{mode === 'mayorista' && discount > 0 && (
+				<span class="absolute left-3 top-3 bg-theme-base-900 px-3 py-1 text-xs font-bold uppercase text-white">
+					Mayorista -{discount}%
+				</span>
+			)}
+		</div>
+		<div class="flex flex-col gap-2 p-2 font-medium">
+			<p class="text-xs uppercase text-theme-base-500">{product.categoria}</p>
+			<h3 class="text-pretty leading-tight text-theme-base-900">{product.nombre}</h3>
+			<p class="text-sm text-theme-base-600">{product.marca || 'Marca pendiente'} - Stock {product.stock ?? 'pendiente'}</p>
+			<p class="text-lg/tight text-theme-base-600">{productViewModel.price.formatted}</p>
+		</div>
+	</a>
+	<button
+		type="button"
+		class="mx-2 mb-2 h-10 bg-theme-base-900 px-4 text-sm font-semibold uppercase text-white transition hover:bg-theme-base-600"
+		data-add-cart
+		data-label="Agregar"
+		data-product={JSON.stringify(cartProduct)}
+	>
+		Agregar
+	</button>
+	<div class="pointer-events-none absolute inset-0 ring-inset ring-theme-base-900 group-focus-within:ring-2"></div>
+</article>
