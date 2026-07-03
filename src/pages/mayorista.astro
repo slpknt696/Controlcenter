@@ -1,18 +1,37 @@
 ---
-import CatalogGrid from '~/components/CatalogGrid.astro';
 import PrimaryLayout from '~/layouts/PrimaryLayout.astro';
-import { productsForMode } from '~/lib/catalog.js';
+import { sitePath } from '~/lib/asset-base.js';
+import { button } from '~/styles.ts';
 ---
 
-<PrimaryLayout title="Catalogo mayorista | Control Center">
+<PrimaryLayout title="Canal mayorista | Control Center">
 	<main class="breakout py-10">
-		<div class="content">
-			<CatalogGrid
-				products={productsForMode('mayorista')}
-				mode="mayorista"
-				title="Catalogo mayorista"
-				description="Catálogo mayorista informativo sujeto a confirmación comercial."
-			/>
-		</div>
+		<section class="content grid gap-6" aria-labelledby="wholesale-heading">
+			<div class="grid gap-3">
+				<p class="text-sm font-bold uppercase text-theme-base-500">Canal mayorista</p>
+				<h1 id="wholesale-heading" class="text-4xl font-extrabold text-theme-base-900">Consultas mayoristas</h1>
+				<p class="max-w-2xl text-theme-base-600">
+					Canal mayorista sujeto a consulta comercial. Las condiciones, disponibilidad y modalidad de atencion se confirman por contacto.
+				</p>
+			</div>
+			<div class="grid gap-4 border-y border-theme-base-300 py-6 md:grid-cols-3">
+				<div>
+					<p class="text-sm font-bold uppercase text-theme-base-500">Condiciones</p>
+					<p class="mt-2 text-theme-base-600">Se informan segun el perfil de compra y la disponibilidad comercial vigente.</p>
+				</div>
+				<div>
+					<p class="text-sm font-bold uppercase text-theme-base-500">Consulta</p>
+					<p class="mt-2 text-theme-base-600">El canal publico prepara el contacto, no confirma precios automaticos ni pedidos mayoristas.</p>
+				</div>
+				<div>
+					<p class="text-sm font-bold uppercase text-theme-base-500">Confirmacion</p>
+					<p class="mt-2 text-theme-base-600">Toda disponibilidad y condicion final queda sujeta a confirmacion comercial.</p>
+				</div>
+			</div>
+			<div class="flex flex-wrap gap-3">
+				<a class={button({ className: 'h-12 px-5' })} href={sitePath('/contacto')}>Consultar condiciones</a>
+				<a class={button({ theme: 'light', className: 'h-12 border border-theme-base-300 px-5' })} href={sitePath('/minorista')}>Ver catalogo minorista</a>
+			</div>
+		</section>
 	</main>
 </PrimaryLayout>

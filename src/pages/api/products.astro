@@ -13,6 +13,31 @@ function normalizeMode(value: string | null) {
 }
 
 const mode = normalizeMode(Astro.url.searchParams.get('mode'));
+
+if (mode === 'mayorista') {
+	return new Response(
+		JSON.stringify({
+			ok: true,
+			legacy: true,
+			contract: 'public-static-informational',
+			officialContracts: OFFICIAL_CONTRACTS,
+			channel: 'mayorista',
+			mode,
+			security: 'public-static-no-auth',
+			count: 0,
+			products: [],
+			message: 'Canal mayorista sujeto a consulta comercial.',
+			commercial_confirmation_required: true,
+		}),
+		{
+			headers: {
+				'content-type': 'application/json; charset=utf-8',
+				'cache-control': 'no-store',
+			},
+		},
+	);
+}
+
 const products = publicProductsForMode(mode);
 
 return new Response(

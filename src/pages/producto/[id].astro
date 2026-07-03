@@ -13,9 +13,7 @@ const product = findProduct(Astro.params.id);
 if (!product) return Astro.redirect('/minorista');
 
 const retail = productPrice(product, 'minorista');
-const wholesale = productPrice(product, 'mayorista');
 const retailCart = asCartProduct(product, 'minorista');
-const wholesaleCart = asCartProduct(product, 'mayorista');
 const backHref = sitePath('/minorista');
 ---
 
@@ -34,11 +32,10 @@ const backHref = sitePath('/minorista');
 					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Marca</dt><dd class="font-bold">{product.marca || 'pendiente'}</dd></div>
 					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Stock</dt><dd class="font-bold">{product.stock ?? 'pendiente'}</dd></div>
 					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Minorista</dt><dd class="font-bold">{formatMoney(retail)}</dd></div>
-					<div class="border border-theme-base-300 p-3"><dt class="text-theme-base-500">Mayorista</dt><dd class="font-bold">{formatMoney(wholesale)}</dd></div>
 				</dl>
 				<div class="grid gap-3 sm:grid-cols-2">
 					<button class={button({ className: 'h-12' })} type="button" data-add-cart data-label="Agregar minorista" data-product={JSON.stringify(retailCart)}>Agregar minorista</button>
-					<button class={button({ theme: 'light', className: 'h-12 border border-theme-base-300' })} type="button" data-add-cart data-label="Agregar mayorista" data-product={JSON.stringify(wholesaleCart)}>Agregar mayorista</button>
+					<a class={button({ theme: 'light', className: 'h-12 border border-theme-base-300' })} href={sitePath('/mayorista')}>Consulta mayorista</a>
 				</div>
 			</section>
 		</div>

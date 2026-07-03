@@ -1,19 +1,18 @@
-import { publicProductsForMode } from '../../../lib/catalog.js';
-
-const mode = 'mayorista';
-const products = publicProductsForMode(mode);
+const responseBody = {
+	ok: true,
+	contract: 'public-static-informational',
+	channel: 'mayorista',
+	mode: 'mayorista',
+	security: 'public-static-no-auth',
+	count: 0,
+	products: [],
+	message: 'Canal mayorista sujeto a consulta comercial.',
+	commercial_confirmation_required: true,
+};
 
 export function GET() {
 	return new Response(
-		JSON.stringify({
-			ok: true,
-			source: 'controlcenter-products.json',
-			mode,
-			contract: 'public-static',
-			security: 'public-static-no-auth',
-			count: products.length,
-			products,
-		}),
+		JSON.stringify(responseBody),
 		{
 			headers: {
 				'content-type': 'application/json; charset=utf-8',
